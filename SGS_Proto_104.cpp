@@ -23,9 +23,9 @@ SGS_Proto_104::Init(short stno,short chno)
 	if(SGS_PCBasic::Init(stno,chno) == PROTO_RET_FAIL)	return	PROTO_RET_FAIL;
 	memset(&config,0,sizeof(IEC104_CONFIG_T));
 	memset(&info,0,sizeof(IEC104_INFO_T));
-	//³õÊ¼»¯»ù±¾ÅäÖÃ²ÎÊı
+	//åˆå§‹åŒ–åŸºæœ¬é…ç½®å‚æ•°
 	ReadConfig();
-	//³õÊ¼»¯»ù±¾ĞÅÏ¢
+	//åˆå§‹åŒ–åŸºæœ¬ä¿¡æ¯
 	//info.SendCommand = IEC104_CMD_RESET_LINK;
 	//info.SendCommand = IEC104_CMD_REQ_LINK_STATE;
 	info.SendTimeFlag = TRUE; 
@@ -60,7 +60,7 @@ int SGS_Proto_104::ProtoTX_Init(short stno,short chno)
 
 
 /*
- *	»ñµÃÊı¾İµ¥Ôª±êÊ¶·û
+ *	è·å¾—æ•°æ®å•å…ƒæ ‡è¯†ç¬¦
  */
 int	
 SGS_Proto_104::GetAppHead(IEC104_APP_HEAD *head)
@@ -100,7 +100,7 @@ SGS_Proto_104::GetAppHead(IEC104_APP_HEAD *head)
 	head->CommAddr = CommAddr;
 	if(head->CommAddr !=  rd->rtuAddr)	
 	{
-		SGS_Printer(LOG_104_RX, "! µØÖ·²»Æ¥Åä,±¨ÎÄÖĞµØÖ·:%d,±¾µØÂ·¾¶±íÖĞÅäÖÃµÄÔ¶³ÌµØÖ·:%d", head->CommAddr , rd->rtuAddr); 
+		SGS_Printer(LOG_104_RX, "! åœ°å€ä¸åŒ¹é…,æŠ¥æ–‡ä¸­åœ°å€:%d,æœ¬åœ°è·¯å¾„è¡¨ä¸­é…ç½®çš„è¿œç¨‹åœ°å€:%d", head->CommAddr , rd->rtuAddr); 
 		//printBuffer(appBuffHead,headLen);
 		return	FALSE;
 	}
@@ -108,13 +108,13 @@ SGS_Proto_104::GetAppHead(IEC104_APP_HEAD *head)
 }
 
 /*
- *	ËÑË÷¶ÔÏóµØÖ·
+ *	æœç´¢å¯¹è±¡åœ°å€
  */
 int	
 SGS_Proto_104::GetObjAddr()
 {
 	hUInt32	addr;
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	memset(&addr,0,sizeof(hUInt32));
 	memcpy(&addr,pAppDataBuf,config.ObjAddrLen);
 	pAppDataBuf += config.ObjAddrLen;
@@ -122,7 +122,7 @@ SGS_Proto_104::GetObjAddr()
 }
 
 /*
- *	½ÓÊÕ
+ *	æ¥æ”¶
  */
 void
 SGS_Proto_104::ProtoRX()
@@ -139,7 +139,7 @@ SGS_Proto_104::ProtoRX()
 		{
 			PushRxHead(-1);
 			//msgRemove(1);
-			//msgDisplay(FRAME_RX_ERROR,"head´íÎó");
+			//msgDisplay(FRAME_RX_ERROR,"headé”™è¯¯");
 			continue;
 		}
 		len -= 2;
@@ -154,7 +154,7 @@ SGS_Proto_104::ProtoRX()
 			}
 			else if(ret == -1)
 			{
-				SGS_Printer(LOG_104_RX, "IEC104-´íÎóÖ¡");
+				SGS_Printer(LOG_104_RX, "IEC104-é”™è¯¯å¸§");
 				base_info->errCnt++;
 			}
 			else
@@ -175,7 +175,7 @@ SGS_Proto_104::ProtoRX()
 
 
 /*
- *	·¢ËÍ
+ *	å‘é€
  */
 void
 SGS_Proto_104::ProtoTX()
@@ -183,18 +183,18 @@ SGS_Proto_104::ProtoTX()
 	
 }
 /*
- *	¹æÔ¼»ù±¾ÅäÖÃĞÅÏ¢
+ *	è§„çº¦åŸºæœ¬é…ç½®ä¿¡æ¯
  */
 void
 SGS_Proto_104::ReadConfig()
 {
-	//ÉèÖÃ³õÊ¼Öµ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¿ªÊ¼
-	//³¤¶È
+	//è®¾ç½®åˆå§‹å€¼â€•â€•â€•â€•â€•â€•â€•â€•å¼€å§‹
+	//é•¿åº¦
 	if(config.CommAddrLen == 0)	config.CommAddrLen = 2;
 	if(config.ObjAddrLen == 0)	config.ObjAddrLen = 3;
 	if(config.CotLen == 0)		config.CotLen = 2;
 	config.FrmMinLen = 6;
-	//ÆğÊ¼µØÖ·
+	//èµ·å§‹åœ°å€
 	if(config.Yx_Start_Addr == 0)	config.Yx_Start_Addr = IEC104_OBJ_16_ADDR_YX_START;
 	if(config.Yx_End_Addr == 0)	config.Yx_End_Addr = IEC104_OBJ_16_ADDR_YX_END;
 	if(config.Prot_Start_Addr == 0)	config.Prot_Start_Addr = IEC104_OBJ_16_ADDR_PROT_START;
@@ -216,13 +216,13 @@ SGS_Proto_104::ReadConfig()
 	if(config.Rtu_State_Addr == 0)	config.Rtu_State_Addr = IEC104_OBJ_16_ADDR_RTU_STATE;
 	if(config.File_Start_Addr == 0)	config.File_Start_Addr = IEC104_OBJ_16_ADDR_FILE_START;
 	if(config.File_End_Addr == 0)	config.File_End_Addr = IEC104_OBJ_16_ADDR_FILE_END;
-	//ÉèÖÃ³õÊ¼Öµ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª½áÊø
-	//¼ÆËã»ù±¾ĞÅÏ¢¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¿ªÊ¼
+	//è®¾ç½®åˆå§‹å€¼â€•â€•â€•â€•â€•â€•â€•â€•ç»“æŸ
+	//è®¡ç®—åŸºæœ¬ä¿¡æ¯â€•â€•â€•â€•â€•â€•â€•â€•å¼€å§‹
 	config.YcMaxNum = config.Yc_End_Addr - config.Yc_Start_Addr + 1;
 	config.YxMaxNum = config.Yx_End_Addr - config.Yx_Start_Addr + 1;
 	//config.KwhMaxNum = config.Kwh_End_Addr - config.Kwh_Start_Addr + 1;
 	//config.YkMaxNum = config.Yk_End_Addr - config.Yk_Start_Addr + 1;
-	//¼ÆËã»ù±¾ĞÅÏ¢¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª½áÊø
+	//è®¡ç®—åŸºæœ¬ä¿¡æ¯â€•â€•â€•â€•â€•â€•â€•â€•ç»“æŸ
 
 
 }
@@ -232,26 +232,26 @@ int SGS_Proto_104::SearchAPCI()
 	GetRecBuf(buffer,4);
 	//msgCopy(buffer,4);
 
-	//I¸ñÊ½
+	//Iæ ¼å¼
 	if((buffer[0]&0x01) == IEC104_APCI_I)
 	{
 		if(RxDataSize <= 4)	return	-1;
-		// ÅĞ¶Ï¶Ô·½µÄ·¢ËÍèåºÍÎÒÃÇµÄ½ÓÊÜ¼ÆÊıÊÇ·ñÒ»ÖÂ£¬Èç¹û²»Ò»ÖÂÖØÖÃÁ´Â· 
+		// åˆ¤æ–­å¯¹æ–¹çš„å‘é€æ¡¢å’Œæˆ‘ä»¬çš„æ¥å—è®¡æ•°æ˜¯å¦ä¸€è‡´ï¼Œå¦‚æœä¸ä¸€è‡´é‡ç½®é“¾è·¯ 
 		if (IsNsNrMatch((unsigned char*)buffer) == FALSE)
 		{
-			InitInfo();//ÖØĞÂ³õÊ¼»¯
+			InitInfo();//é‡æ–°åˆå§‹åŒ–
 			return -1;
 		}
 		return	IEC104_APCI_I;
 	}
-	//S¸ñÊ½
+	//Sæ ¼å¼
 	else	if((buffer[0]&0x03) == IEC104_APCI_S)
 	{
 		if(RxDataSize != 4)	return	-1;
-		SGS_Printer(LOG_104_RX, "Rx <---------- IEC104-ÊÕµ½SÖ¡");
+		SGS_Printer(LOG_104_RX, "Rx <---------- IEC104-æ”¶åˆ°Så¸§");
 		return	IEC104_APCI_S;
 	}
-	//U¸ñÊ½
+	//Uæ ¼å¼
 	else	if((buffer[0]&0x03) == IEC104_APCI_U)
 	{
 		if(RxDataSize != 4)	return	-1;
@@ -260,21 +260,21 @@ int SGS_Proto_104::SearchAPCI()
 		case	APCI_U_STARTDT_CON:
 			if(info.LinkState==STATE_UNBOUND && info.WorkState==STATE_WAIT_STARTDT_CON)
 			{
-				SGS_Printer(LOG_104_RX, "Rx <------------ ÊÕµ½104-U¸ñÊ½ĞÅÏ¢±¨ÎÄ£ºÆô¶¯Á´½ÓÈ·ÈÏ");
+				SGS_Printer(LOG_104_RX, "Rx <------------ æ”¶åˆ°104-Uæ ¼å¼ä¿¡æ¯æŠ¥æ–‡ï¼šå¯åŠ¨é“¾æ¥ç¡®è®¤");
 				info.LinkState = STATE_IDLE;
 				info.WorkState = STATE_FREE;
 				info.T5 = 0;
 			}
 			break;
 		case	APCI_U_STOPDT_CON:
-			SGS_Printer(LOG_104_RX, "Rx <------------ ÊÕµ½Í£Ö¹Á´Â·È·ÈÏ");
+			SGS_Printer(LOG_104_RX, "Rx <------------ æ”¶åˆ°åœæ­¢é“¾è·¯ç¡®è®¤");
 			if(info.LinkState==STATE_IDLE && info.WorkState==STATE_WAIT_STOPDT_CON)
 			{
 				InitInfo();
 			}
 			break;
 		case	APCI_U_TESTFR_CON:
-			SGS_Printer(LOG_104_RX, "Rx <------------ ÊÕµ½²âÊÔÁ´Â·È·ÈÏ");
+			SGS_Printer(LOG_104_RX, "Rx <------------ æ”¶åˆ°æµ‹è¯•é“¾è·¯ç¡®è®¤");
 			if(info.LinkState==STATE_IDLE && info.WorkState==STATE_WAIT_TESTDT_CON)
 			{
 				info.WorkState = STATE_FREE;
@@ -282,7 +282,7 @@ int SGS_Proto_104::SearchAPCI()
 			}
 			break;
 		case	APCI_U_TESTFR_ACT:
-			SGS_Printer(LOG_104_RX, "Rx <-------------- IEC-104-U ¸ñÊ½ĞÅÏ¢±¨ÎÄ£º¼¤»î²âÊÔÖ¡");
+			SGS_Printer(LOG_104_RX, "Rx <-------------- IEC-104-U æ ¼å¼ä¿¡æ¯æŠ¥æ–‡ï¼šæ¿€æ´»æµ‹è¯•å¸§");
 			info.Send_U_TESTFR_CON_Flag = TRUE;
 			if(info.LinkState==STATE_IDLE)
 			{
@@ -300,7 +300,7 @@ int SGS_Proto_104::SearchAPCI()
 void SGS_Proto_104::RxSomeData()
 {
 	// bruce +++++++++++++++++++++++++++++++++++++++
-	if (info.WorkState == STATE_FREE)// Ö»ÓĞÊÜµ½ÏàÓ¦µÄ±¨ÎÄ£¬ÀıÈçÇëÇóÈ«Êı¾İ¶Ô·½»Ø´ğÈ«Êı¾İ
+	if (info.WorkState == STATE_FREE)// åªæœ‰å—åˆ°ç›¸åº”çš„æŠ¥æ–‡ï¼Œä¾‹å¦‚è¯·æ±‚å…¨æ•°æ®å¯¹æ–¹å›ç­”å…¨æ•°æ®
 	{
 		info.T1 = 0;
 	}
@@ -312,7 +312,7 @@ int SGS_Proto_104::SearchASDU()
 {
 	if(info.LinkState == STATE_UNBOUND)
 	{
-		SGS_Printer(LOG_104_RX, "Rx <------------- Á´Â·Î´ÆôÓÃ£¬ÊÕµ½±¨ÎÄ£¬²»´¦Àí");
+		SGS_Printer(LOG_104_RX, "Rx <------------- é“¾è·¯æœªå¯ç”¨ï¼Œæ”¶åˆ°æŠ¥æ–‡ï¼Œä¸å¤„ç†");
 		return	FALSE;
 	}
 
@@ -334,61 +334,61 @@ int SGS_Proto_104::SearchASDU()
 	//logprint(LOG_104_RX, "Rx <------------- GetAppHead() == TRUE, AppHead.Type = %d", AppHead.Type);
 	switch(AppHead.Type)
 	{
-	case	C_IC_NA_1:		//×ÜÕÙ»½
+	case	C_IC_NA_1:		//æ€»å¬å”¤
 		DoCallAllDataAck(AppHead);
 		break;
-	case	C_CI_NA_1:		//¼ÆÊıÁ¿ÕÙ»½
+	case	C_CI_NA_1:		//è®¡æ•°é‡å¬å”¤
 		DoCallAllKwhAck(AppHead);
 		break;
-	case	C_CS_NA_1:		//Ê±ÖÓÍ¬²½
+	case	C_CS_NA_1:		//æ—¶é’ŸåŒæ­¥
 		DoSyncTimeAck(AppHead);
 		break;
-	case	C_SC_NA_1:		//Ò£¿Ø£¨µ¥µãÃüÁî£©
-	case	C_DC_NA_1:		//Ò£¿Ø£¨Ë«µãÃüÁî£©
-		SGS_Printer(LOG_104_RX, "Rx <--------- Éè±¸¿ØÖÆ·µĞ£±¨ÎÄ <¼¤»îÈ·ÈÏ>");
+	case	C_SC_NA_1:		//é¥æ§ï¼ˆå•ç‚¹å‘½ä»¤ï¼‰
+	case	C_DC_NA_1:		//é¥æ§ï¼ˆåŒç‚¹å‘½ä»¤ï¼‰
+		SGS_Printer(LOG_104_RX, "Rx <--------- è®¾å¤‡æ§åˆ¶è¿”æ ¡æŠ¥æ–‡ <æ¿€æ´»ç¡®è®¤>");
 		DoYkAck(AppHead);
 		break;
-	case	C_RC_NA_1:		//Ò£µ÷
+	case	C_RC_NA_1:		//é¥è°ƒ
 		break;
-	case	C_SE_NA_1:		//Éèµã¹éÒ»»¯
-	case	C_SE_NB_1:		//±ê¶È»¯
-	case	C_SE_NC_1:		//¸¡µã
-		SGS_Printer(LOG_104_RX, "Rx <--------- ¿ØÖÆÉèµã·µĞ£±¨ÎÄ <¼¤»îÈ·ÈÏ>");
+	case	C_SE_NA_1:		//è®¾ç‚¹å½’ä¸€åŒ–
+	case	C_SE_NB_1:		//æ ‡åº¦åŒ–
+	case	C_SE_NC_1:		//æµ®ç‚¹
+		SGS_Printer(LOG_104_RX, "Rx <--------- æ§åˆ¶è®¾ç‚¹è¿”æ ¡æŠ¥æ–‡ <æ¿€æ´»ç¡®è®¤>");
 		DoAnalogOutPutAck(AppHead);
 		break;
-	case	M_SP_NA_1:		//µ¥µãĞÅÏ¢
-	case	M_DP_NA_1:		//Ë«µãĞÅÏ¢
-	case	M_PS_NA_1:		//´ø±äÎ»¼ì³öµÄ³É×éµ¥µãĞÅÏ¢
+	case	M_SP_NA_1:		//å•ç‚¹ä¿¡æ¯
+	case	M_DP_NA_1:		//åŒç‚¹ä¿¡æ¯
+	case	M_PS_NA_1:		//å¸¦å˜ä½æ£€å‡ºçš„æˆç»„å•ç‚¹ä¿¡æ¯
 		YX_RxProc(AppHead);
 		break;
-	case	M_SP_TA_1:		//´øCP24Time2aÊ±±êµÄµ¥µãĞÅÏ¢
-	case	M_DP_TA_1:		//´øCP24Time2aÊ±±êµÄË«µãĞÅÏ¢
-	case	M_SP_TB_1:		//´øCP56Time2aÊ±±êµÄµ¥µãĞÅÏ¢
-	case	M_DP_TB_1:		//´øCP56Time2aÊ±±êµÄË«µãĞÅÏ¢
+	case	M_SP_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„å•ç‚¹ä¿¡æ¯
+	case	M_DP_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„åŒç‚¹ä¿¡æ¯
+	case	M_SP_TB_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„å•ç‚¹ä¿¡æ¯
+	case	M_DP_TB_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„åŒç‚¹ä¿¡æ¯
 		SOE_RxProc(AppHead);
 		break;
-	case	M_ME_NA_1:		//²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_NB_1:		//²âÁ¿Öµ£¬±ê¶È»¯Öµ
-	case	M_ME_NC_1:		//²âÁ¿Öµ£¬¶Ì¸¡µãÊı
-	case	M_ME_TA_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_TB_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬±ê¶È»¯Öµ
-	case	M_ME_TC_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬¶Ì¸¡µãÊı
-	case	M_ME_TD_1:		//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_TE_1:		//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬±ê¶È»¯Öµ
-	case	M_ME_TF_1:		//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬¶Ì¸¡µãÊı
-	case	M_ME_ND_1:		//²âÁ¿Öµ£¬²»´øÆ·ÖÊÃèÊö´ÊµÄ¹æÒ»»¯Öµ
+	case	M_ME_NA_1:		//æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_NB_1:		//æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
+	case	M_ME_NC_1:		//æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
+	case	M_ME_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_TB_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
+	case	M_ME_TC_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
+	case	M_ME_TD_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_TE_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
+	case	M_ME_TF_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
+	case	M_ME_ND_1:		//æµ‹é‡å€¼ï¼Œä¸å¸¦å“è´¨æè¿°è¯çš„è§„ä¸€åŒ–å€¼
 		YC_RxProc(AppHead);
 		break;
-	case	M_IT_NA_1:		//ÀÛ»ıÁ¿
-	case	M_IT_TA_1:		//´øCP24Time2aÊ±±êµÄÀÛ»ıÁ¿
-	case	M_IT_TB_1:		//´øCP56Time2aÊ±±êµÄÀÛ»ıÁ¿
+	case	M_IT_NA_1:		//ç´¯ç§¯é‡
+	case	M_IT_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„ç´¯ç§¯é‡
+	case	M_IT_TB_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„ç´¯ç§¯é‡
 		//KWH_RxProc(AppHead);
 		break;
 	case P_PL_NA_1:
 		//PLAN_RxProc(AppHead);
 		break;
 	default:
-		SGS_Printer(LOG_104_RX,"´íÎó:Î´ÖªÀàĞÍ");
+		SGS_Printer(LOG_104_RX,"é”™è¯¯:æœªçŸ¥ç±»å‹");
 		break;
 	}
 
@@ -397,7 +397,7 @@ int SGS_Proto_104::SearchASDU()
 
 void SGS_Proto_104::NoRxAnyData()
 {
-	//info.T1++;//T1³¬Ê±Ó¦ÔÚIèåÎŞÓ¦´ğ»òÕßT3³¬Ê±ºó²âÊÔÁ¬½ÓÎŞÓ¦´ğºó·¢Éú
+	//info.T1++;//T1è¶…æ—¶åº”åœ¨Iæ¡¢æ— åº”ç­”æˆ–è€…T3è¶…æ—¶åæµ‹è¯•è¿æ¥æ— åº”ç­”åå‘ç”Ÿ
 	if (info.WorkState!=STATE_FREE)
 	{
 		info.T1++;
@@ -433,7 +433,7 @@ int SGS_Proto_104::IsNsNrMatch( unsigned char * buff )
 	if (info.NR == nPeerNs)// && info.Ns == nPeerNr)
 		return TRUE;
 
-	SGS_Printer(LOG_104_RX, "Rx <---------- ¶Ô·½·¢ËÍèå¼ÆÊı(%d)ºÍÎÒÃÇµÄ½ÓÊÜ¼ÆÊı(%d)²»Ò»ÖÂ, ÖØÖÃÁ´Â·",nPeerNs,info.NR);
+	SGS_Printer(LOG_104_RX, "Rx <---------- å¯¹æ–¹å‘é€æ¡¢è®¡æ•°(%d)å’Œæˆ‘ä»¬çš„æ¥å—è®¡æ•°(%d)ä¸ä¸€è‡´, é‡ç½®é“¾è·¯",nPeerNs,info.NR);
 	return FALSE;
 }
 
@@ -442,7 +442,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 	SGS_Printer(LOG_104_RX, "RX <----------------------- YC_RxProc");
 	if(head.VSQ.Num == 0)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
 
@@ -453,19 +453,19 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 	num = head.VSQ.Num;
 	maxnum = rd->ycnum;
 
-	//½âÎöºó±¨ÎÄĞÅÏ¢
+	//è§£æåæŠ¥æ–‡ä¿¡æ¯
 	char descr[64] = "";
-	ACE_OS::sprintf(descr,"Ò£²âÖµ num=%d",num);
+	ACE_OS::sprintf(descr,"é¥æµ‹å€¼ num=%d",num);
 	//msgDisplay(FRAME_RX,descr);
 
 	float val = 0.0;
 
 	switch(head.Type)
 	{
-	case	M_ME_NA_1:		//²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_NB_1:		//²âÁ¿Öµ£¬±ê¶È»¯Öµ
+	case	M_ME_NA_1:		//æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_NB_1:		//æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
 		{
-			SGS_Printer(LOG_104_RX, "RX <------------ ²âÁ¿Öµ num=%d", num);
+			SGS_Printer(LOG_104_RX, "RX <------------ æµ‹é‡å€¼ num=%d", num);
 			for(i=0;i<num;i++)
 			{
 				if(i==0 || head.VSQ.SQ==0)
@@ -487,7 +487,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					pAppDataBuf += 3;
 					continue;
 				}
-				if(pAppDataBuf[2] & 0x80)	 // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				if(pAppDataBuf[2] & 0x80)	 // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					SGS_Printer(LOG_104_RX, "RX <------------ pAppDataBuf[2]=%x, continue", pAppDataBuf[2]);
 					pAppDataBuf += 3;	
@@ -502,8 +502,8 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_ME_TA_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_TB_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬±ê¶È»¯Öµ
+	case	M_ME_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_TB_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
 		{
 			for(i=0;i<num;i++)
 			{
@@ -515,7 +515,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					pAppDataBuf += 6;
 					continue;
 				}
-				if(pAppDataBuf[2] & 0x80)	 // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				if(pAppDataBuf[2] & 0x80)	 // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					pAppDataBuf += 6;	
 					continue;
@@ -524,7 +524,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 				val = (float)MakeWord(pAppDataBuf[0],(pAppDataBuf[1]&0x7F));
 				if(pAppDataBuf[1] & 0x80)	val = -(float)(0xFFFF - MakeWord(pAppDataBuf[0],pAppDataBuf[1]) + 1);
 				pAppDataBuf += 3;
-				//Ê±¼ä´¦Àí
+				//æ—¶é—´å¤„ç†
 	/*			ms = MakeWord(pAppDataBuf[0],pAppDataBuf[1]);
 
 				CDateTime::currentDateTime(cp24Time);
@@ -539,8 +539,8 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_ME_TD_1:	//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬¹æÒ»»¯Öµ
-	case	M_ME_TE_1:	//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬±ê¶È»¯Öµ
+	case	M_ME_TD_1:	//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œè§„ä¸€åŒ–å€¼
+	case	M_ME_TE_1:	//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼Œæ ‡åº¦åŒ–å€¼
 		{
 			for(i=0;i<num;i++)
 			{
@@ -552,7 +552,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					pAppDataBuf += 10;
 					continue;
 				}
-				if(pAppDataBuf[2] & 0x80)	 // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				if(pAppDataBuf[2] & 0x80)	 // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					pAppDataBuf += 10;	
 					continue;
@@ -561,7 +561,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 				val = MakeWord(pAppDataBuf[0],(pAppDataBuf[1]&0x7F));
 				if(pAppDataBuf[1] & 0x80)	val = -(float)(0xFFFF - MakeWord(pAppDataBuf[0],pAppDataBuf[1]) + 1);
 				pAppDataBuf += 3;
-				////Ê±¼ä´¦Àí  
+				////æ—¶é—´å¤„ç†  
 				//int ms = MakeWord(pAppDataBuf[0],pAppDataBuf[1]);
 				//int seconds = ms/1000;
 				//int minute = pAppDataBuf[2] & 0x3F;
@@ -577,9 +577,9 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_ME_NC_1:		//²âÁ¿Öµ£¬¶Ì¸¡µãÊı
+	case	M_ME_NC_1:		//æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
 		{
-			SGS_Printer(LOG_104_RX, "RX <------------ ²âÁ¿Öµ ¶Ì¸¡µãÊı num=%d", num);
+			SGS_Printer(LOG_104_RX, "RX <------------ æµ‹é‡å€¼ çŸ­æµ®ç‚¹æ•° num=%d", num);
 			for(i=0;i<num;i++)
 			{
 				if(i==0 || head.VSQ.SQ==0)	no = GetObjAddr() - config.Yc_Start_Addr;
@@ -591,19 +591,19 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					continue;
 				}
 
-				// ------------------ ÖÊÁ¿ÂëÏà¹Ø --------------------------------
-				if(pAppDataBuf[4] & 0x80)     // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				// ------------------ è´¨é‡ç ç›¸å…³ --------------------------------
+				if(pAppDataBuf[4] & 0x80)     // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					pAppDataBuf += 5;	
 					continue;
 				}
 				//memset(&data,0,sizeof(data));
 
-				// ------------------ ÖÊÁ¿ÂëÏà¹Ø --------------------------------
+				// ------------------ è´¨é‡ç ç›¸å…³ --------------------------------
 				//hUInt32 quality = 0;
-				//if(pAppDataBuf[4] & 0x40)    // ÎŞĞ§±êÖ¾
+				//if(pAppDataBuf[4] & 0x40)    // æ— æ•ˆæ ‡å¿—
 				//	PDT_SET_BITS(quality,QUALITY_BIT_IV);
-				//if(pAppDataBuf[4] & 0x20)    // ÈË¹¤±êÖ¾
+				//if(pAppDataBuf[4] & 0x20)    // äººå·¥æ ‡å¿—
 				//	PDT_SET_BITS(quality,QUALITY_BIT_MS);
 				//if(pAppDataBuf[4] & 0x01)    // wfp added at 20080403 for henan
 				//	PDT_SET_BITS(quality,QUALITY_BIT_OV);
@@ -616,7 +616,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_ME_TC_1:		//´øCP24Time2aÊ±±êµÄ²âÁ¿Öµ£¬¶Ì¸¡µãÊı
+	case	M_ME_TC_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
 		{
 			for(i=0;i<num;i++)
 			{
@@ -628,7 +628,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					pAppDataBuf += 8;
 					continue;
 				}
-				if(pAppDataBuf[4] & 0x80)	 // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				if(pAppDataBuf[4] & 0x80)	 // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					pAppDataBuf += 5;
 					continue;
@@ -637,7 +637,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 				val = 0.0;
 				memcpy(&val,pAppDataBuf,4);
 				pAppDataBuf += 5;
-				////Ê±¼ä´¦Àí
+				////æ—¶é—´å¤„ç†
 				//ms = MakeWord(pAppDataBuf[0],pAppDataBuf[1]);
 
 				//CDateTime::currentDateTime(cp24Time);
@@ -652,7 +652,7 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_ME_TF_1:		//´øCP56Time2aÊ±±êµÄ²âÁ¿Öµ£¬¶Ì¸¡µãÊı
+	case	M_ME_TF_1:		//å¸¦CP56Time2aæ—¶æ ‡çš„æµ‹é‡å€¼ï¼ŒçŸ­æµ®ç‚¹æ•°
 		{
 			for(i=0;i<num;i++)
 			{
@@ -664,25 +664,25 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 					pAppDataBuf += 12;
 					continue;
 				}
-				if(pAppDataBuf[4] & 0x80)	 // Î´±»¼¤»î,wfp changed at 20080403 for henan,old=81
+				if(pAppDataBuf[4] & 0x80)	 // æœªè¢«æ¿€æ´»,wfp changed at 20080403 for henan,old=81
 				{
 					pAppDataBuf += 12;	
 					continue;
 				}
 				val = 0.0;
 				memcpy(&val,pAppDataBuf,4);
-				// ------------------ ÖÊÁ¿ÂëÏà¹Ø --------------------------------
+				// ------------------ è´¨é‡ç ç›¸å…³ --------------------------------
 				//hUInt32 quality = 0;
-				//if(pAppDataBuf[4] & 0x40)    // ÎŞĞ§±êÖ¾
+				//if(pAppDataBuf[4] & 0x40)    // æ— æ•ˆæ ‡å¿—
 				//	PDT_SET_BITS(quality,QUALITY_BIT_IV);
-				//if(pAppDataBuf[4] & 0x20)    // ÈË¹¤±êÖ¾
+				//if(pAppDataBuf[4] & 0x20)    // äººå·¥æ ‡å¿—
 				//	PDT_SET_BITS(quality,QUALITY_BIT_MS);
 				//if(pAppDataBuf[4] & 0x01)    // wfp added at 20080403 for henan
 				//	PDT_SET_BITS(quality,QUALITY_BIT_OV);
 
 				//data.quality = quality;
 				pAppDataBuf += 5;
-				////Æß¸ö×Ö½ÚµÄÊ±¼äĞÅÏ¢ÔİÊ±Î´´¦Àí
+				////ä¸ƒä¸ªå­—èŠ‚çš„æ—¶é—´ä¿¡æ¯æš‚æ—¶æœªå¤„ç†
 				//int ms = MakeWord(pAppDataBuf[0],pAppDataBuf[1]);
 				//int seconds = ms/1000;
 				//int minute = pAppDataBuf[2] & 0x3F;
@@ -694,13 +694,13 @@ void SGS_Proto_104::YC_RxProc( IEC104_APP_HEAD &head )
 				//if ( year == 1970 ) seconds += 30;
 				//data.updateTime = (hUInt32)CDateTime(year,month,day,hour,minute,seconds).toTimeT();
 				pAppDataBuf += 7;
-				//Ê±¼ä´¦Àí
+				//æ—¶é—´å¤„ç†
 
 				SetOneYc(no,val);
 			}
 			break;
 		}
-	case	M_ME_ND_1:		//²âÁ¿Öµ£¬²»´øÆ·ÖÊÃèÊö´ÊµÄ¹æÒ»»¯Öµ
+	case	M_ME_ND_1:		//æµ‹é‡å€¼ï¼Œä¸å¸¦å“è´¨æè¿°è¯çš„è§„ä¸€åŒ–å€¼
 		{
 			for(i=0;i<num;i++)
 			{
@@ -729,7 +729,7 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 {
 	if(head.VSQ.Num == 0)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
 
@@ -741,17 +741,17 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 
 	unsigned char		val;
 
-	////½âÎöºó±¨ÎÄĞÅÏ¢
+	////è§£æåæŠ¥æ–‡ä¿¡æ¯
 	//char descr[64] = "";
-	//ACE_OS::sprintf(descr,"Ò£ĞÅÖµ num=%d",num);
+	//ACE_OS::sprintf(descr,"é¥ä¿¡å€¼ num=%d",num);
 	//msgDisplay(FRAME_RX,descr);
 
 
 	switch(head.Type)
 	{
-	case	M_SP_NA_1:		//µ¥µãĞÅÏ¢
+	case	M_SP_NA_1:		//å•ç‚¹ä¿¡æ¯
 		{
-			SGS_Printer(LOG_104_RX, "Rx <----------- µ¥µãĞÅÏ¢(num=%d)", num);
+			SGS_Printer(LOG_104_RX, "Rx <----------- å•ç‚¹ä¿¡æ¯(num=%d)", num);
 			for(i=0;i<num;i++)
 			{
 				if(i==0 || head.VSQ.SQ==0)	no = GetObjAddr() - config.Yx_Start_Addr;
@@ -766,20 +766,20 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 					continue;
 				}
 
-				// ------------------ ÖÊÁ¿ÂëÏà¹Ø --------------------------------
-				if(pAppDataBuf[0] & 0x80)     // Î´±»¼¤»î==¹æÔ¼ÎŞĞ§Î»
+				// ------------------ è´¨é‡ç ç›¸å…³ --------------------------------
+				if(pAppDataBuf[0] & 0x80)     // æœªè¢«æ¿€æ´»==è§„çº¦æ— æ•ˆä½
 				{
 					pAppDataBuf += 1;
-					SGS_Printer(LOG_104_RX,"Î´±»¼¤»î");
+					SGS_Printer(LOG_104_RX,"æœªè¢«æ¿€æ´»");
 					continue;
 				}
 				
 
-				//// ------------------ ÖÊÁ¿ÂëÏà¹Ø --------------------------------
+				//// ------------------ è´¨é‡ç ç›¸å…³ --------------------------------
 				//hUInt32 quality = 0;
-				//if(pAppDataBuf[0] & 0x40)    // ÀÏÖµ±êÖ¾=ÎŞĞ§
+				//if(pAppDataBuf[0] & 0x40)    // è€å€¼æ ‡å¿—=æ— æ•ˆ
 				//	PDT_SET_BITS(quality,QUALITY_BIT_IV);
-				//if(pAppDataBuf[0] & 0x20)    // È¡´ú=ÈË¹¤±êÖ¾
+				//if(pAppDataBuf[0] & 0x20)    // å–ä»£=äººå·¥æ ‡å¿—
 				//	PDT_SET_BITS(quality,QUALITY_BIT_MS);
 
 				//data.quality = quality;
@@ -791,7 +791,7 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_DP_NA_1:		//Ë«µãĞÅÏ¢
+	case	M_DP_NA_1:		//åŒç‚¹ä¿¡æ¯
 		{
 			for(i=0;i<num;i++)
 			{
@@ -813,7 +813,7 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_PS_NA_1:		//´ø±äÎ»¼ì³öµÄ³É×éµ¥µãĞÅÏ¢
+	case	M_PS_NA_1:		//å¸¦å˜ä½æ£€å‡ºçš„æˆç»„å•ç‚¹ä¿¡æ¯
 		break;
 	default:
 		break;
@@ -822,20 +822,20 @@ void SGS_Proto_104::YX_RxProc( IEC104_APP_HEAD &head )
 
 void SGS_Proto_104::DoCallAllDataAck( IEC104_APP_HEAD &head )
 {
-	//½á¹¹ÏŞ¶¨´Ê
+	//ç»“æ„é™å®šè¯
 	if(head.VSQ.SQ!=0 || head.VSQ.Num!=1)	
 	{
-		SGS_Printer(LOG_104_RX, "Rx <----------- head.VSQ.SQ == %d ,head.VSQ.Num = %d, ²»ºÏÀí",
+		SGS_Printer(LOG_104_RX, "Rx <----------- head.VSQ.SQ == %d ,head.VSQ.Num = %d, ä¸åˆç†",
 			head.VSQ.SQ, head.VSQ.Num);
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
-	//´«ÊäÔ­Òò
+	//ä¼ è¾“åŸå› 
 	switch(head.COT.Cause)
 	{
 	case	CAUSE_ACT_CON:
-		SGS_Printer(LOG_104_RX, "Rx <----------- È«Êı¾İ ¼¤»îÈ·ÈÏ");
-		//msgDisplay(FRAME_RX,"È«Êı¾İ¼¤»îÈ·ÈÏ");
+		SGS_Printer(LOG_104_RX, "Rx <----------- å…¨æ•°æ® æ¿€æ´»ç¡®è®¤");
+		//msgDisplay(FRAME_RX,"å…¨æ•°æ®æ¿€æ´»ç¡®è®¤");
 		if(info.WorkState == STATE_WAIT_ALLDATA_CON)	
 		{
 			info.WorkState = STATE_WAIT_ALLDATA;
@@ -843,8 +843,8 @@ void SGS_Proto_104::DoCallAllDataAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	case	CAUSE_STOPACT_CON:
-		SGS_Printer(LOG_104_RX, "Rx <----------- È«Êı¾İ Í£Ö¹¼¤»îÈ·ÈÏ");
-		//msgDisplay(FRAME_RX,"È«Êı¾İÍ£Ö¹¼¤»îÈ·ÈÏ");
+		SGS_Printer(LOG_104_RX, "Rx <----------- å…¨æ•°æ® åœæ­¢æ¿€æ´»ç¡®è®¤");
+		//msgDisplay(FRAME_RX,"å…¨æ•°æ®åœæ­¢æ¿€æ´»ç¡®è®¤");
 		if(info.WorkState == STATE_WAIT_ALLDATA_CON)
 		{
 			info.WorkState = STATE_FREE;
@@ -852,8 +852,8 @@ void SGS_Proto_104::DoCallAllDataAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	case	CAUSE_ACT_TERM:
-		SGS_Printer(LOG_104_RX, "Rx <----------- È«Êı¾İ ¼¤»îÖÕÖ¹");
-		//msgDisplay(FRAME_RX,"È«Êı¾İ ¼¤»îÖÕÖ¹");
+		SGS_Printer(LOG_104_RX, "Rx <----------- å…¨æ•°æ® æ¿€æ´»ç»ˆæ­¢");
+		//msgDisplay(FRAME_RX,"å…¨æ•°æ® æ¿€æ´»ç»ˆæ­¢");
 		if(info.WorkState == STATE_WAIT_ALLDATA)
 		{
 			info.WorkState = STATE_FREE;
@@ -861,53 +861,53 @@ void SGS_Proto_104::DoCallAllDataAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	default:
-		SGS_Printer(LOG_104_RX, "Rx <----------- head.COT.Cause = %d, Î´ÖªµÄÈ·ÈÏÔ­Òò",head.COT.Cause);
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:Î´ÖªµÄÈ·ÈÏÔ­Òò");
+		SGS_Printer(LOG_104_RX, "Rx <----------- head.COT.Cause = %d, æœªçŸ¥çš„ç¡®è®¤åŸå› ",head.COT.Cause);
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:æœªçŸ¥çš„ç¡®è®¤åŸå› ");
 		break;
 	}
 }
 
 void SGS_Proto_104::DoSyncTimeAck( IEC104_APP_HEAD &head )
 {
-	//½á¹¹ÏŞ¶¨´Ê
+	//ç»“æ„é™å®šè¯
 	if(head.VSQ.SQ!=0 || head.VSQ.Num!=1)
 	{
 		SGS_Printer(LOG_104_RX, "Rx <------------ head.VSQ.SQ!=0 || head.VSQ.Num!=1");
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
-	//´«ÊäÔ­Òò
+	//ä¼ è¾“åŸå› 
 	if( head.COT.Cause==CAUSE_ACT_CON )
 	{
-		//msgDisplay(FRAME_RX,"¶ÔÊ±È·ÈÏ");
+		//msgDisplay(FRAME_RX,"å¯¹æ—¶ç¡®è®¤");
 		if (info.WorkState==STATE_WAIT_TIME_CON )
 		{
-			SGS_Printer(LOG_104_RX, "Rx <------------ ¶ÔÊ±µÃµ½È·ÈÏ£¬½«¹¤×÷×´Ì¬ÖÃÎª¿ÕÏĞ");
+			SGS_Printer(LOG_104_RX, "Rx <------------ å¯¹æ—¶å¾—åˆ°ç¡®è®¤ï¼Œå°†å·¥ä½œçŠ¶æ€ç½®ä¸ºç©ºé—²");
 			info.WorkState = STATE_FREE;
 			info.T5 = 0;
 		}
-		else SGS_Printer(LOG_104_RX, "Rx <------------ ¶ÔÊ±µÃµ½È·ÈÏ£¬¹¤×÷×´Ì¬²»ÊÇWait sync time confirm");
+		else SGS_Printer(LOG_104_RX, "Rx <------------ å¯¹æ—¶å¾—åˆ°ç¡®è®¤ï¼Œå·¥ä½œçŠ¶æ€ä¸æ˜¯Wait sync time confirm");
 	}
 	else 
 	{
-		SGS_Printer(LOG_104_RX, "Rx <------------ ¶ÔÊ±Ã»ÓĞµÃµ½È·ÈÏ");
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:¶ÔÊ±È·ÈÏÊ§°Ü");
+		SGS_Printer(LOG_104_RX, "Rx <------------ å¯¹æ—¶æ²¡æœ‰å¾—åˆ°ç¡®è®¤");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:å¯¹æ—¶ç¡®è®¤å¤±è´¥");
 	}
 }
 
 void SGS_Proto_104::DoCallAllKwhAck( IEC104_APP_HEAD &head )
 {
-	//½á¹¹ÏŞ¶¨´Ê
+	//ç»“æ„é™å®šè¯
 	if(head.VSQ.SQ!=0 || head.VSQ.Num!=1)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
-	//´«ÊäÔ­Òò
+	//ä¼ è¾“åŸå› 
 	switch(head.COT.Cause)
 	{
 	case	CAUSE_ACT_CON:
-		//msgDisplay(FRAME_RX,"È«µç¶È¼¤»îÈ·ÈÏ");
+		//msgDisplay(FRAME_RX,"å…¨ç”µåº¦æ¿€æ´»ç¡®è®¤");
 		if(info.WorkState == STATE_WAIT_ALLKWH_CON)
 		{
 			info.WorkState = STATE_WAIT_ALLKWH;
@@ -915,7 +915,7 @@ void SGS_Proto_104::DoCallAllKwhAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	case	CAUSE_STOPACT_CON:
-		//msgDisplay(FRAME_RX,"È«Êı¾İÍ£Ö¹¼¤»îÈ·ÈÏ");
+		//msgDisplay(FRAME_RX,"å…¨æ•°æ®åœæ­¢æ¿€æ´»ç¡®è®¤");
 		if(info.WorkState == STATE_WAIT_ALLKWH_CON)
 		{
 			info.WorkState = STATE_FREE;
@@ -923,7 +923,7 @@ void SGS_Proto_104::DoCallAllKwhAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	case	CAUSE_ACT_TERM:
-		//msgDisplay(FRAME_RX,"È«Êı¾İ¼¤»îÖÕÖ¹");
+		//msgDisplay(FRAME_RX,"å…¨æ•°æ®æ¿€æ´»ç»ˆæ­¢");
 		if(info.WorkState == STATE_WAIT_ALLKWH)
 		{
 			info.WorkState = STATE_FREE;
@@ -931,7 +931,7 @@ void SGS_Proto_104::DoCallAllKwhAck( IEC104_APP_HEAD &head )
 		}
 		break;
 	default:
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:Î´ÖªµÄÈ·ÈÏÔ­Òò");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:æœªçŸ¥çš„ç¡®è®¤åŸå› ");
 		break;
 	}
 }
@@ -940,7 +940,7 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 {
 	if(head.VSQ.Num == 0)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
 
@@ -954,14 +954,14 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 	num = head.VSQ.Num;
 	maxnum = rd->yxnum;
 
-	////½âÎöºó±¨ÎÄĞÅÏ¢
+	////è§£æåæŠ¥æ–‡ä¿¡æ¯
 	//char descr[64] = "";
 	//ACE_OS::sprintf(descr,"SOE num=%d",num);
 	//msgDisplay(FRAME_RX,descr);
 
 	switch(head.Type)
 	{
-	case	M_SP_TA_1:		//´øCP24Time2aÊ±±êµÄµ¥µãĞÅÏ¢
+	case	M_SP_TA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„å•ç‚¹ä¿¡æ¯
 		{
 			for(i=0;i<num;i++)
 			{
@@ -1001,7 +1001,7 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_DP_NA_1:		//´øCP24Time2aÊ±±êµÄË«µãĞÅÏ¢
+	case	M_DP_NA_1:		//å¸¦CP24Time2aæ—¶æ ‡çš„åŒç‚¹ä¿¡æ¯
 		{
 			for(i=0;i<num;i++)
 			{
@@ -1042,7 +1042,7 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_SP_TB_1:	//´øCP56Time2aÊ±±êµÄµ¥µãĞÅÏ¢
+	case	M_SP_TB_1:	//å¸¦CP56Time2aæ—¶æ ‡çš„å•ç‚¹ä¿¡æ¯
 		{
 			for(i=0;i<num;i++)
 			{
@@ -1088,7 +1088,7 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 			}
 			break;
 		}
-	case	M_DP_TB_1:	//´øCP56Time2aÊ±±êµÄË«µãĞÅÏ¢
+	case	M_DP_TB_1:	//å¸¦CP56Time2aæ—¶æ ‡çš„åŒç‚¹ä¿¡æ¯
 		{
 			for(i=0;i<num;i++)
 			{
@@ -1143,60 +1143,60 @@ void SGS_Proto_104::SOE_RxProc( IEC104_APP_HEAD &head )
 
 void SGS_Proto_104::DoAnalogOutPutAck( IEC104_APP_HEAD &head )
 {
-	//½á¹¹ÏŞ¶¨´Ê
+	//ç»“æ„é™å®šè¯
 	if(head.VSQ.SQ!=0 || head.VSQ.Num!=1)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
 
 	unsigned short	no;
-	//ĞòºÅ
+	//åºå·
 	no = GetObjAddr() - config.Set_Start_Addr;
-	//Öµ
+	//å€¼
 	hInt16		value;
 	switch (head.Type)
 	{
-	case	C_SE_NA_1:		//¹éÒ»»¯
-	case	C_SE_NB_1:		//±ê¶È»¯
+	case	C_SE_NA_1:		//å½’ä¸€åŒ–
+	case	C_SE_NB_1:		//æ ‡åº¦åŒ–
 		memcpy(&value,pAppDataBuf,2);
 		pAppDataBuf += 2;
 		break;
-	case	C_SE_NC_1:		//¸¡µã
+	case	C_SE_NC_1:		//æµ®ç‚¹
 		memcpy(&value,pAppDataBuf,4);
 		pAppDataBuf += 4;
 		break;
 	}
-	//ÉèµãÃüÁîÏŞ¶¨´Ê
-	hUInt8		S_E;   //¿ØÖÆÀàĞÍ
+	//è®¾ç‚¹å‘½ä»¤é™å®šè¯
+	hUInt8		S_E;   //æ§åˆ¶ç±»å‹
 	hUInt8		QOS = *(pAppDataBuf++);
-	//´«ÊäÔ­Òò
+	//ä¼ è¾“åŸå› 
 	//CAE_CControlInterface	cae_ctrlinf;
 	switch(head.COT.Cause)
 	{
-	case	CAUSE_ACT_CON:		//¼¤»îÈ·ÈÏ
-		S_E = (QOS & 0x80)? YK_ACTION_SELECT_V:YK_ACTION_EXECUTE;	//YK_ACTION_SELECT_V¡ª¡ªÖ´ĞĞ£¬YK_ACTION_EXECUTE
-		SGS_Printer(30099,"ÊÕµ½Ä£ÄâÁ¿Êä³ö¼¤»îÈ·ÈÏ : Rtu = %d , No = %d , Value = %d",rd->order,no,(hInt32)value);
-		//msgDisplay(FRAME_RX,"Ä£ÄâÁ¿Êä³ö¼¤»îÈ·ÈÏ");
+	case	CAUSE_ACT_CON:		//æ¿€æ´»ç¡®è®¤
+		S_E = (QOS & 0x80)? YK_ACTION_SELECT_V:YK_ACTION_EXECUTE;	//YK_ACTION_SELECT_Vâ€•â€•æ‰§è¡Œï¼ŒYK_ACTION_EXECUTE
+		SGS_Printer(30099,"æ”¶åˆ°æ¨¡æ‹Ÿé‡è¾“å‡ºæ¿€æ´»ç¡®è®¤ : Rtu = %d , No = %d , Value = %d",rd->order,no,(hInt32)value);
+		//msgDisplay(FRAME_RX,"æ¨¡æ‹Ÿé‡è¾“å‡ºæ¿€æ´»ç¡®è®¤");
 		//cae_ctrlinf.SendYKReturnCmd(rtu_no,no,TRUE);
 		break;
-	case	CAUSE_STOPACT_CON:	//Í£Ö¹¼¤»îÈ·ÈÏ
-		S_E = YK_ACTION_CANCEL;   // YK_ACTION_CANCEL--Ò£¿Ø³·Ïú
-		SGS_Printer(30099,"ÊÕµ½Ä£ÄâÁ¿Êä³öÍ£Ö¹¼¤»îÈ·ÈÏ : Rtu = %d , No = %d , Value = %d",rd->order,no,(hInt32)value);
-		//msgDisplay(FRAME_RX,"Ä£ÄâÁ¿Êä³öÍ£Ö¹¼¤»îÈ·ÈÏ");
+	case	CAUSE_STOPACT_CON:	//åœæ­¢æ¿€æ´»ç¡®è®¤
+		S_E = YK_ACTION_CANCEL;   // YK_ACTION_CANCEL--é¥æ§æ’¤é”€
+		SGS_Printer(30099,"æ”¶åˆ°æ¨¡æ‹Ÿé‡è¾“å‡ºåœæ­¢æ¿€æ´»ç¡®è®¤ : Rtu = %d , No = %d , Value = %d",rd->order,no,(hInt32)value);
+		//msgDisplay(FRAME_RX,"æ¨¡æ‹Ÿé‡è¾“å‡ºåœæ­¢æ¿€æ´»ç¡®è®¤");
 		//cae_ctrlinf.SendYKReturnCmd(rtu_no,no,FALSE);
 		break;
 	default:
-		//msgDisplay(30099,"´íÎó:Ä£ÄâÁ¿Êä³öÈ·ÈÏÊ§°Ü");
+		//msgDisplay(30099,"é”™è¯¯:æ¨¡æ‹Ÿé‡è¾“å‡ºç¡®è®¤å¤±è´¥");
 		return;
 	}
 
 	SGS_ChanYC_Shm_Ptr_T ycptr = NULL;
-	//m_pGroup = m_commInf.group( m_pRoute->group); //ÕÒµ½Êı¾İ×é
+	//m_pGroup = m_commInf.group( m_pRoute->group); //æ‰¾åˆ°æ•°æ®ç»„
 	for (hUInt32 pointNo = 0;pointNo < rd->ycnum ; pointNo++)
 	{
 		ycptr = da->data_yc + pointNo;
-		//ycptr = m_dataInf.ycPara( m_pRoute->group,pointNo);  //¸ù¾İÊı¾İ×éºÅºÍÒ£²âºÅÕÒµ½Ò£²â±í
+		//ycptr = m_dataInf.ycPara( m_pRoute->group,pointNo);  //æ ¹æ®æ•°æ®ç»„å·å’Œé¥æµ‹å·æ‰¾åˆ°é¥æµ‹è¡¨
 		if (ycptr == NULL || !ycptr->valid) continue;
 		if (ycptr->isctrl ==1 && ycptr->ctrlno == no)
 		{
@@ -1206,7 +1206,7 @@ void SGS_Proto_104::DoAnalogOutPutAck( IEC104_APP_HEAD &head )
 	}
 	if(!ycptr)
 	{
-		SGS_Printer(30099,"<group=%d,code=%d> ooÒ£µ÷·µĞ£×é±¨ÎÄ´íÎóoo! ²âµã²»´æÔÚ",rd->order,no);
+		SGS_Printer(30099,"<group=%d,code=%d> ooé¥è°ƒè¿”æ ¡ç»„æŠ¥æ–‡é”™è¯¯oo! æµ‹ç‚¹ä¸å­˜åœ¨",rd->order,no);
 		return ;
 	}
 
@@ -1219,10 +1219,10 @@ void SGS_Proto_104::DoAnalogOutPutAck( IEC104_APP_HEAD &head )
 	ack.ackState = 0;
 	if ( !setCtrlCmdAckEx((char*)(&ack),sizeof(ctrl_pro_yk_ack))) 
 	{
-		SGS_Printer(30099,"<group=%d,code=%d> ooÒ£µ÷·µĞ£Êä³ö´íÎóoo! ĞÅºÅÎŞ·¨´«µİ¸øºóÌ¨",ack.groupNo,ack.ctrlNo);
+		SGS_Printer(30099,"<group=%d,code=%d> ooé¥è°ƒè¿”æ ¡è¾“å‡ºé”™è¯¯oo! ä¿¡å·æ— æ³•ä¼ é€’ç»™åå°",ack.groupNo,ack.ctrlNo);
 		return ;
 	}
-	SGS_Printer(30099,"<group = %d,no = %d,funcCode = %d,state = %d> Ò£µ÷·µĞ£ÑéÊä³ö³É¹¦£¡",ack.groupNo,ack.ctrlNo,ack.funcCode,ack.ackState);
+	SGS_Printer(30099,"<group = %d,no = %d,funcCode = %d,state = %d> é¥è°ƒè¿”æ ¡éªŒè¾“å‡ºæˆåŠŸï¼",ack.groupNo,ack.ctrlNo,ack.funcCode,ack.ackState);
 
 
 	
@@ -1231,60 +1231,60 @@ void SGS_Proto_104::DoAnalogOutPutAck( IEC104_APP_HEAD &head )
 
 void SGS_Proto_104::DoYkAck( IEC104_APP_HEAD &head )
 {
-	//½á¹¹ÏŞ¶¨´Ê
+	//ç»“æ„é™å®šè¯
 	if(head.VSQ.SQ!=0 || head.VSQ.Num!=1)	
 	{
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:VSQ²»ºÏÀí");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:VSQä¸åˆç†");
 		return;
 	}
 
 	unsigned char	state;
 	unsigned short	no;
 	hUInt8		S_E,QU,D_SCS;
-	//Ò£¿ØºÅ
+	//é¥æ§å·
 	no = GetObjAddr() - config.Yk_Start_Addr;
 	hUInt8		D_SCO = *(pAppDataBuf++);
 
-	//´«ÊäÔ­Òò
+	//ä¼ è¾“åŸå› 
 	switch(head.COT.Cause)
 	{
-	case	CAUSE_ACT_CON:		//¼¤»îÈ·ÈÏ7
-		S_E = (D_SCO & 0x80)? YK_ACTION_SELECT_V:YK_ACTION_EXECUTE;	//¿ØÖÆÀàĞÍYK_ACTION_SELECT_V¡ª¡ªÖ´ĞĞ£¬YK_ACTION_EXECUTE¡ª¡ªÑ¡Ôñ
-		//msgDisplay(FRAME_RX,"Ò£¿Ø¼¤»îÈ·ÈÏ");
+	case	CAUSE_ACT_CON:		//æ¿€æ´»ç¡®è®¤7
+		S_E = (D_SCO & 0x80)? YK_ACTION_SELECT_V:YK_ACTION_EXECUTE;	//æ§åˆ¶ç±»å‹YK_ACTION_SELECT_Vâ€•â€•æ‰§è¡Œï¼ŒYK_ACTION_EXECUTEâ€•â€•é€‰æ‹©
+		//msgDisplay(FRAME_RX,"é¥æ§æ¿€æ´»ç¡®è®¤");
 		break;
-	case	CAUSE_STOPACT_CON:	//Í£Ö¹¼¤»îÈ·ÈÏ9
-		S_E = YK_ACTION_CANCEL;   // YK_ACTION_CANCEL--Ò£¿Ø³·Ïú
-		//msgDisplay(FRAME_RX,"Ò£¿ØÍ£Ö¹¼¤»îÈ·ÈÏ");
+	case	CAUSE_STOPACT_CON:	//åœæ­¢æ¿€æ´»ç¡®è®¤9
+		S_E = YK_ACTION_CANCEL;   // YK_ACTION_CANCEL--é¥æ§æ’¤é”€
+		//msgDisplay(FRAME_RX,"é¥æ§åœæ­¢æ¿€æ´»ç¡®è®¤");
 		break;
 	default:
-		//msgDisplay(FRAME_RX_ERROR,"´íÎó:Ò£¿ØÈ·ÈÏÊ§°Ü");
+		//msgDisplay(FRAME_RX_ERROR,"é”™è¯¯:é¥æ§ç¡®è®¤å¤±è´¥");
 		return;
 	}
-	//Ò£¿ØÃüÁîÏŞ¶¨´Ê
+	//é¥æ§å‘½ä»¤é™å®šè¯
 	switch(head.Type)
 	{
-	case	C_SC_NA_1:			//µ¥µãÃüÁî
+	case	C_SC_NA_1:			//å•ç‚¹å‘½ä»¤
 		QU = (D_SCO & 0x7E) >> 1;
 		D_SCS = D_SCO & 0x01;
-		if(D_SCS == 0)	state = YK_OFF;			//¿ª¡ª¡ª0
-		else	state = YK_ON;					//ºÏ¡ª¡ª1
+		if(D_SCS == 0)	state = YK_OFF;			//å¼€â€•â€•0
+		else	state = YK_ON;					//åˆâ€•â€•1
 		break;
-	case	C_DC_NA_1:			//Ë«µãÃüÁî
+	case	C_DC_NA_1:			//åŒç‚¹å‘½ä»¤
 		QU = (D_SCO & 0x7C) >> 2;
 		D_SCS = D_SCO & 0x03;
-		if(D_SCS == 1)	state = YK_OFF;			//¿ª¡ª¡ª1
-		else	if(D_SCS == 2)	state = YK_ON;	//ºÏ¡ª¡ª2
-		else	state = YK_ERR;					//²»ÔÊĞí¡ª¡ª0¡¢3
+		if(D_SCS == 1)	state = YK_OFF;			//å¼€â€•â€•1
+		else	if(D_SCS == 2)	state = YK_ON;	//åˆâ€•â€•2
+		else	state = YK_ERR;					//ä¸å…è®¸â€•â€•0ã€3
 		break;
 	default:
 		return;
 	}
 
-	SGS_ChanYX_Shm_Ptr_T yxptr = NULL;  //Í¨¹ı×éºÅºÍÒ£¿ØºÅÕÒµ½Ô´×é±àÂëÓë Ò£²âºÅ
-	//m_pGroup = m_commInf.group(m_pRoute->group); //ÕÒµ½Êı¾İ×é
+	SGS_ChanYX_Shm_Ptr_T yxptr = NULL;  //é€šè¿‡ç»„å·å’Œé¥æ§å·æ‰¾åˆ°æºç»„ç¼–ç ä¸ é¥æµ‹å·
+	//m_pGroup = m_commInf.group(m_pRoute->group); //æ‰¾åˆ°æ•°æ®ç»„
 	for (hUInt32 pointNo = 0;pointNo < rd->yxnum ; pointNo++)
 	{
-		yxptr = da->data_yx + pointNo;  //¸ù¾İÊı¾İ×éºÅºÍÒ£²âºÅÕÒµ½Ò£²â±í
+		yxptr = da->data_yx + pointNo;  //æ ¹æ®æ•°æ®ç»„å·å’Œé¥æµ‹å·æ‰¾åˆ°é¥æµ‹è¡¨
 		if (yxptr == NULL || !yxptr->valid) continue;
 		if (yxptr->isctrl ==1 && yxptr->ctrlno == no)
 		{
@@ -1294,13 +1294,13 @@ void SGS_Proto_104::DoYkAck( IEC104_APP_HEAD &head )
 	}
 	if(!yxptr)
 	{
-		SGS_Printer(30099,"<group=%d,code=%d> ooÒ£¿Ø·´Ğ£´íÎóoo! ²âµã²»´æÔÚ",rd->order,no);
+		SGS_Printer(30099,"<group=%d,code=%d> ooé¥æ§åæ ¡é”™è¯¯oo! æµ‹ç‚¹ä¸å­˜åœ¨",rd->order,no);
 		return;
 	}
-	//DAC_GROUP* grpptr = m_commInf.group(yxptr->srcGroup);  //Í¨¹ıÔ´×éĞòºÅÕÒµ½Ô´×é±àÂëºÅ
+	//DAC_GROUP* grpptr = m_commInf.group(yxptr->srcGroup);  //é€šè¿‡æºç»„åºå·æ‰¾åˆ°æºç»„ç¼–ç å·
 	//if(!grpptr)
 	//{
-	//	logprint(LOG_104_ERR,"<group=%s,code=%d> ooÒ£¿Ø·´Ğ£´íÎóoo! ²âµã²»´æÔÚ",grpptr->code,no);
+	//	logprint(LOG_104_ERR,"<group=%s,code=%d> ooé¥æ§åæ ¡é”™è¯¯oo! æµ‹ç‚¹ä¸å­˜åœ¨",grpptr->code,no);
 	//	return ;
 	//}
 	ctrl_pro_yk_ack ack;
@@ -1311,10 +1311,10 @@ void SGS_Proto_104::DoYkAck( IEC104_APP_HEAD &head )
 	ack.ackState = 0;
 	if ( !setCtrlCmdAckEx((char*)(&ack),sizeof(ctrl_pro_yk_ack))) 
 	{
-		SGS_Printer(30099,"<group=%d,code=%d> ooÒ£¿Ø·µĞ£Êä³ö´íÎóoo! ĞÅºÅÎŞ·¨´«µİ¸øºóÌ¨",ack.groupNo,ack.ctrlNo);
+		SGS_Printer(30099,"<group=%d,code=%d> ooé¥æ§è¿”æ ¡è¾“å‡ºé”™è¯¯oo! ä¿¡å·æ— æ³•ä¼ é€’ç»™åå°",ack.groupNo,ack.ctrlNo);
 		return ;
 	}
-	SGS_Printer(30099,"<group = %d,no = %d,funcCode = %d,state = %d> Ò£¿Ø·µĞ£ÑéÊä³ö³É¹¦£¡",ack.groupNo,ack.ctrlNo,ack.funcCode,ack.ackState);
+	SGS_Printer(30099,"<group = %d,no = %d,funcCode = %d,state = %d> é¥æ§è¿”æ ¡éªŒè¾“å‡ºæˆåŠŸï¼",ack.groupNo,ack.ctrlNo,ack.funcCode,ack.ackState);
 
 	return;
 }
